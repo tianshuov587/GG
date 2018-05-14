@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1525960231636.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "CE7DBF70",
+    "lastKnownWriteTime" : 1526214267,
+    "last_content_update" : 1526225746657,
+    "path" : "~/sales/lm analysis.R",
+    "project_path" : "lm analysis.R",
+    "properties" : {
+        "cursorPosition" : "78,0",
+        "scrollLine" : "51",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

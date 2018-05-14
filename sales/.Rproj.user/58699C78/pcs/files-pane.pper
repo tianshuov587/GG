@@ -1,0 +1,9 @@
+{
+    "path" : "~/sales",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

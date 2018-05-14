@@ -1,0 +1,279 @@
+install.packages("ggpubr")
+library(ggpubr)
+library(ggplot2)
+library(dplyr)
+library(readxl)
+dataset<-read_xlsx("C:\\Users\\tsv587\\Desktop\\R\\20150101-20180430sales database.xlsx")
+dataset$month<-NULL
+
+dataset$month<-substr(dataset$'销售时间', start=1,stop=7)
+dataset$year <-substr(dataset$'销售时间', start=1,stop=4)
+table(dataset$'销售员')
+
+colnames(dataset)[24]<-"salesprice"
+colnames(dataset)[27]<-"gross"
+colnames(dataset)[29]<-"salesman"
+
+a<-dataset%>%
+  group_by(salesman)%>%
+  summarise(quantity =n(),
+            totalsalesprice=sum(salesprice),
+            totalgrossprofit=sum(gross)  )
+a$totalsalesprice<-as.factor(a$totalsalesprice)
+a$totalgrossprofit<-as.factor(a$totalgrossprofit)
+ggplot()+geom_bar(data=a,aes(x=salesman,y=totalsalesprice),
+                  stat = "identity")
+ggplot()+geom_bar(data=a,aes(x=salesman,y=totalgrossprofit),
+                                              stat = "identity")
+
+b<-dataset%>%
+  group_by(month)%>%
+  summarise(quantity =n(),
+            totalsalesprice=sum(salesprice),
+            totalgrossprofit=sum(gross)  )
+b$month<-gsub("-",".",b$month)
+b$month<-as.numeric(b$month)
+b<-b[-1,]
+qplot(month,totalsalesprice,data=b,facets = . ~ month)
+
+
+c<-dataset%>%
+  group_by(month,salesman)%>%
+  summarise(
+            quantity =n(),
+            totalsalesprice=sum(salesprice),
+            totalgrossprofit=sum(gross)  )
+c<-group_by(c,salesman)
+
+
+
+
+c$month<-gsub("-",".",c$month)
+c$month<-as.numeric(c$month)
+
+
+c$newmonth<-1
+
+for(a in 1:332)
+{
+  c$newmonth[a]<-as.numeric( substr(c[a,1],start = 6,stop = 7))/12+as.numeric( substr(c[a,1],start = 1,stop = 4))
+  
+  
+}
+
+d<-filter(c,salesman=='田晓东')
+as.numeric( substr(c[2,1],start = 6,stop = 7))/12+as.numeric( substr(c[2,1],start = 1,stop = 4)) #stupid
+
+
+
+#qplot(month,totalsalesprice,data=c,facets = . ~ month,geom=c("point", "line"),color=salesman)
+
+ggplot(c, aes(x = newmonth, y = totalsalesprice,color=salesman),group_by=salesman) +geom_point()+geom_smooth(method='lm')
+
+
+ggplot(d, aes(x = newmonth, y = totalsalesprice)) + geom_point()+geom_smooth(method='lm')
+
+
+
+
+#next
+colnames(dataset)[8]<-"merchandisecode"
+colnames(dataset)[9]<-"merchandisename"
+colnames(dataset)[12]<-"factory"
+a1<-dataset%>%
+  group_by(merchandisename,year)%>%
+  summarise(quantity =n(),
+            
+            totalsalesprice=sum(salesprice),
+            totalgrossprofit=sum(gross)  )
+
+b1<-filter(a1,year=="2015")%>%
+  arrange(desc(totalsalesprice))
+
+b2<-filter(a1,year=="2016")%>%
+  arrange(desc(totalsalesprice))
+
+b3<-filter(a1,year=="2017")%>%
+  arrange(desc(totalsalesprice))
+
+
+sum(b1$totalsalesprice[1:20])/sum(b1$totalsalesprice)
+sum(b2$totalsalesprice[1:20])/sum(b2$totalsalesprice)
+sum(b3$totalsalesprice[1:20])/sum(b3$totalsalesprice)
+
+result<-data.frame(names=c(1:5),salesrate=c(1:5),grossrate=c(1:5))
+m1<-merge(b1,b2,by="merchandisename")
+m1<-merge(m1,b3,by="merchandisename")
+
+m1$salerate1615<-m1$totalsalesprice.y/m1$totalsalesprice.x
+m1$salerate1716<-m1$totalsalesprice/m1$totalsalesprice.y
+m1$sum17rate<-m1$totalsalesprice / 13236875
+m2<-filter(m1,salerate1615>1)%>%
+ filter(salerate1716>1)%>%
+ filter(sum17rate>0.05)   #sales best  cooperation corperates
+
+
+m1$grossrate1615<-m1$totalgrossprofit.y/m1$totalgrossprofit.x
+m1$grossrate1716<-m1$totalgrossprofit/m1$totalgrossprofit.y
+m1$sum17rategross<-m1$totalgrossprofit / sum(m1$totalgrossprofit)
+m3<-filter(m1,grossrate1615>0.5)%>%
+  filter(grossrate1716>0.5)%>%
+  filter(sum17rategross>0.05)
+
+
+
+
+
+
+
+#next
+colnames(dataset)[7]<-"hospital"
+table(dataset$'客户')
+mapdata1<-dataset
+mapdata1$lon<-NA
+mapdata1$lat<-NA
+
+mapdata1[grep("凤城",mapdata1$hospital),72]<-40.453028
+mapdata1[grep("凤城",mapdata1$hospital),71]<-124.069387
+
+mapdata1[grep("鞍",mapdata1$hospital),72]<-41.121774
+mapdata1[grep("鞍",mapdata1$hospital),71]<-122.990561
+
+mapdata1[grep("台安",mapdata1$hospital),72]<-41.2912751
+mapdata1[grep("台安",mapdata1$hospital),71]<-122.145436
+
+mapdata1[grep("海城",mapdata1$hospital),72]<-40.8276111
+mapdata1[grep("海城",mapdata1$hospital),71]<-122.4545385
+
+
+mapdata1[grep("丹东",mapdata1$hospital),72]<-40.453028
+mapdata1[grep("丹东",mapdata1$hospital),71]<-124.069387
+
+
+
+mapdata1[grep("东港",mapdata1$hospital),72]<-39.9809894
+mapdata1[grep("东港",mapdata1$hospital),71]<-123.2872326
+
+mapdata1[grep("瓦房店",mapdata1$hospital),72]<-39.7091677
+mapdata1[grep("瓦房店",mapdata1$hospital),71]<-121.1940939
+
+
+mapdata1[grep("大连",mapdata1$hospital),72]<-38.915883
+mapdata1[grep("大连",mapdata1$hospital),71]<-121.601134
+
+
+mapdata1[grep("沈",mapdata1$hospital),72]<-41.8049906
+mapdata1[grep("沈",mapdata1$hospital),71]<-123.1563122
+
+mapdata1[grep("辽宁",mapdata1$hospital),72]<-41.8049906
+mapdata1[grep("辽宁",mapdata1$hospital),71]<-123.1563122
+  
+    
+mapdata1[grep("中国",mapdata1$hospital),72]<-41.8049906
+mapdata1[grep("中国",mapdata1$hospital),71]<-123.1563122
+  
+  
+mapdata1[grep("本溪",mapdata1$hospital),72]<-41.3033738
+mapdata1[grep("本溪",mapdata1$hospital),71]<-123.7159552
+  
+mapdata1[grep("桓仁",mapdata1$hospital),72]<-41.2367542
+mapdata1[grep("桓仁",mapdata1$hospital),71]<-124.6987834  
+  
+  
+mapdata1[grep("阜新",mapdata1$hospital),72]<-42.0168928
+mapdata1[grep("阜新",mapdata1$hospital),71]<-121.5249166
+  
+  
+  
+mapdata1[grep("朝阳",mapdata1$hospital),72]<-41.5780842
+mapdata1[grep("朝阳",mapdata1$hospital),71]<-120.3085884
+  
+  
+mapdata1[grep("葫芦岛",mapdata1$hospital),72]<-40.7524541
+mapdata1[grep("葫芦岛",mapdata1$hospital),71]<-120.7084949
+
+mapdata1[grep("铁岭",mapdata1$hospital),72]<-42.280588
+mapdata1[grep("铁岭",mapdata1$hospital),71]<-123.7747064
+
+
+
+install.packages("ggmap", type = "source")
+
+library(ggmap)
+twmap <- get_map(location = 'LiaoNing', zoom = 7,language = "zh-Tw")
+ggmap(twmap)
+
+
+stateCenter<-mapdata1%>%
+  group_by(lon,lat)%>%
+  select(salesprice,gross)
+  
+stateCenter<- na.omit(stateCenter)
+stateCenter1<-stateCenter[,-4]
+stateCenter2<-stateCenter[,-3]
+head(stateCenter)
+
+stateCenter1<-arrange(stateCenter1,salesprice)
+stateCenter1<-stateCenter1[-c(1:271),]
+
+ojbk<-data.frame()
+for(i in 1:nrow(stateCenter1)){
+  ojbk[i,1]<-round(stateCenter1[i,3]/1000+1)}
+
+PopPoint<-NULL 
+for(i in 1:nrow(stateCenter1)){
+  #每100萬人轉為1點
+  for(j in 1:ojbk[i,1]){
+    PopPoint<-rbind(PopPoint,stateCenter1[i,])   
+  }
+}
+
+
+PopPoint1<-PopPoint
+
+PopPoint1<-PopPoint%>%
+  group_by(lon,lat)%>%
+  summarise(n=sum(salesprice))
+
+
+install.packages("rJava")
+library(xlsx)
+
+
+write.csv(PopPoint1,'test.csv')
+
+
+head(PopPoint,3)
+
+
+
+library(ggplot2)
+densityMap<-ggmap(twmap, extent = "device") + 
+  geom_density2d(data = PopPoint2, aes(x = lon, y = lat), size = 0.3) + 
+  stat_density2d(data = PopPoint2, 
+                 aes(x = lon, y = lat, fill = ..level.., alpha = ..level..), 
+                 size = 0.01, bins = 16, geom = "polygon") + 
+  scale_fill_gradient(low = "green", high = "red", guide = FALSE) + 
+  scale_alpha(range = c(0, 0.3), guide = FALSE)
+densityMap
+
+
+
+
+
+library(dplyr)
+
+
+go<-dataset%>%
+  group_by(year,hospital)%>%
+  summarise(
+            totalsalesprice=sum(salesprice),
+            totalgrossprofit=sum(gross)  )
+
+
+write.csv(m1,'test3.csv')
+
+
+
+
+

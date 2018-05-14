@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526002736092.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "AB01BDFF",
+    "lastKnownWriteTime" : 32651569751457901,
+    "last_content_update" : 1526002736092,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "id" : "ffa7ade685334c618d2470dce3233db9",
+        "name" : "lma",
+        "title" : "lma"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "object_explorer"
+}

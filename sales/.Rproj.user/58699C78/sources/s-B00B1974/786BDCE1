@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526050144359.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "786BDCE1",
+    "lastKnownWriteTime" : 3419473789575321445,
+    "last_content_update" : 1526050144359,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "A4748552",
+        "caption" : "ojbk",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=ojbk&cache_key=A4748552",
+        "displayedObservations" : "8872",
+        "environment" : "",
+        "object" : "ojbk",
+        "preview" : "0",
+        "totalObservations" : "8872",
+        "variables" : "1"
+    },
+    "relative_order" : 18,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

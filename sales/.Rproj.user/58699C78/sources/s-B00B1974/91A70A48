@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526216744288.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "91A70A48",
+    "lastKnownWriteTime" : 3122468154596405560,
+    "last_content_update" : 1526216744288,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "2C496D5C",
+        "caption" : "PopPoint2",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=PopPoint2&cache_key=2C496D5C",
+        "displayedObservations" : "16502",
+        "environment" : "",
+        "object" : "PopPoint2",
+        "preview" : "0",
+        "totalObservations" : "16502",
+        "variables" : "3"
+    },
+    "relative_order" : 25,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
